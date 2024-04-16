@@ -1,8 +1,13 @@
 import numpy as np
+from mpi4py import MPI
 
-def seq_kmeans(points, k, max_iterations=1, convergence_threshold=0.05):
-    
-    centroids = points[np.random.choice(range(len(points)), k, replace=False)]
+def kmeans(points, k, max_iterations=1, convergence_threshold=0.05):
+    comm = MPI.COMM_WORLD
+    rank = comm.Get_rank()
+    size = comm.Get_size()
+
+    if rank == 0: # Initialisation aléatoire des centroïdes
+        centroids = points[np.random.choice(range(len(points)), k, replace=False)]
 
     previous_labels = None
 
@@ -18,6 +23,7 @@ def seq_kmeans(points, k, max_iterations=1, convergence_threshold=0.05):
         if previous_labels is not None:
             num_changed = np.sum(labels != previous_labels)
             if num_changed / len(points) < convergence_threshold:
+                print(f"CLAUSE SEUIL!!! à {iteration}")
                 break
         
         previous_labels = np.copy(labels)

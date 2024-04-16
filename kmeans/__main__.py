@@ -18,7 +18,7 @@ def cmdLineParsing():
 
 def readData(filename):
     with open(filename, 'r') as f:
-        metadata = (line.split(' ')[0]for line in f.readlines())
+        metadata = [line.split(' ')[0] for line in f.readlines()]
 
     d = dict()
     d["data"] = metadata[0]
@@ -30,4 +30,4 @@ def readData(filename):
 
 
 if __name__ == "__main__":
-    print(cmdLineParsing())
+    print(readData(cmdLineParsing()))
