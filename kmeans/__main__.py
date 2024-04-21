@@ -1,7 +1,9 @@
 import argparse
+from mpi4py import MPI
 import os, sys
 
 from io_data import find_indexes, read_data
+from par_kmeans import kmeans
 
 def cmd_line_parsing():
     parser = argparse.ArgumentParser(prog="kmeans",
@@ -35,9 +37,17 @@ if __name__ == "__main__":
     dim = 2
     print(filename, N, K)
 
-    indexes = find_indexes(filename, 20)
-    print(len(indexes))
+    comm = MPI.COMM_WORLD
+    rank = comm.Get_rank()
+    size = comm.Get_size()
 
-    array = read_data(filename, dim, *indexes[19])
+    indexes = None
+    if rank==0:
+        indexes = find_indexes(filename, 20)
+    
+    indexes = comm.bcast(indexes, root=0)
 
-    print(array)
+    points = read_data(filename, dim, *indexes[rank])
+    labels, centroids = kmeans(points, K)
+
+    print(labels, centroids)

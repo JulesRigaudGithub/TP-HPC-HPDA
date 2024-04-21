@@ -45,9 +45,7 @@ def kmeans(points, k, max_iterations=100, convergence_threshold=0.005, total_poi
     return labels, centroids
 
 
-np.random.seed(0)
-points = np.random.rand(20, 2)
+# np.random.seed(0)
+# points = np.random.rand(20, 2)
 
-print(kmeans(points, 3))
-print("bonjour")
 
