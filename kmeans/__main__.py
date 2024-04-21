@@ -1,7 +1,9 @@
 import argparse
 import os, sys
 
-def cmdLineParsing():
+from io_data import find_indexes, read_data
+
+def cmd_line_parsing():
     parser = argparse.ArgumentParser(prog="kmeans",
                                     description="Compute K-Means on the DCE cluster",
                                     epilog="Looking for any help ? Please contact G. Desjonqueres")
@@ -16,18 +18,26 @@ def cmdLineParsing():
 
     return args.filename
 
-def readData(filename):
+def read_metadata(filename):
     with open(filename, 'r') as f:
-        metadata = [line.split(' ')[0] for line in f.readlines()]
+        metadata = [line.split(' ')[0].strip('\n') for line in f.readlines()]
 
-    d = dict()
-    d["data"] = metadata[0]
-    d["N"] = int(metadata[1])
-    d["K"] = int(metadata[2])
-    return d
+    dirname = os.path.dirname(filename)
+  
+    return f"{dirname}/{metadata[0]}",  int(metadata[1]), int(metadata[2])
 
 
 
 
 if __name__ == "__main__":
-    print(readData(cmdLineParsing()))
+    filename_meta = cmd_line_parsing()
+    filename, N, K = read_metadata(filename_meta)
+    dim = 2
+    print(filename, N, K)
+
+    indexes = find_indexes(filename, 20)
+    print(len(indexes))
+
+    array = read_data(filename, dim, *indexes[19])
+
+    print(array)
