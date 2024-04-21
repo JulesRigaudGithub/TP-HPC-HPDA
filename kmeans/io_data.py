@@ -51,3 +51,14 @@ def read_data(filename, dim, start_index, next_index):
         print(f"Initialization error : {e}")
     except ValueError as e:
         print(f"Initialization error : {e}")
+
+def write_data(filename, buffer):
+    try :
+        with open(filename, 'a') as f:
+            for line in buffer :
+                f.write(f"{line[0]:.2f} {line[1]:.2f}\n")
+       
+    except FileNotFoundError as e:
+        print(f"Initialization error : {e}")
+    except ValueError as e:
+        print(f"Initialization error : {e}")

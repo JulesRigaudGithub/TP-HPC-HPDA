@@ -2,7 +2,7 @@ import argparse
 from mpi4py import MPI
 import os, sys
 
-from io_data import find_indexes, read_data
+from io_data import find_indexes, read_data, write_data
 from par_kmeans import kmeans
 
 def cmd_line_parsing():
@@ -34,6 +34,7 @@ def read_metadata(filename):
 if __name__ == "__main__":
     filename_meta = cmd_line_parsing()
     filename, N, K = read_metadata(filename_meta)
+    labels_filename = "Labels_" + filename
     dim = 2
     print(filename, N, K)
 
@@ -49,5 +50,11 @@ if __name__ == "__main__":
 
     points = read_data(filename, dim, *indexes[rank])
     labels, centroids = kmeans(points, K)
+
+    for i in range(size):
+        if rank==i:
+            write_data(labels_filename, labels)
+        comm.Barrier()
+    
 
     print(labels, centroids)
