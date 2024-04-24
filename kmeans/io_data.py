@@ -40,10 +40,6 @@ def read_data(filename, dim, start_index, next_index):
 
                 if len(line_decoded) == dim :
                     lst.append(np.array(list(map(float, line_decoded))))
-                # for el in line.decode('utf8').split(' '):
-                #     print(el)
-                # lst.append(map(float, line.decode('utf8').split(' ')))
-                # print(lst[-1])
 
         return np.array(lst)
            
@@ -57,6 +53,15 @@ def write_labels(filename, buffer):
         with open(filename, 'a') as f:
             for cluster_assignment in buffer :
                 f.write(f"{cluster_assignment}\n")
+       
+    except FileNotFoundError as e:
+        print(f"Write error : {e}")
+
+def write_centroids(filename, buffer):
+    try :
+        with open(filename, 'a') as f:
+            for centroid in buffer :
+                f.write(f"{centroid[0]} {centroid[1]}\n")
        
     except FileNotFoundError as e:
         print(f"Write error : {e}")
