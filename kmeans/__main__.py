@@ -1,6 +1,7 @@
 import argparse
 from mpi4py import MPI
 import os, sys
+import time
 
 from io_data import find_indexes, read_data, write_labels, write_centroids
 from par_kmeans import kmeans
@@ -42,6 +43,7 @@ if __name__ == "__main__":
     rank = comm.Get_rank()
     size = comm.Get_size()
 
+    read_start = time.time()
     indexes = None
     # le process maître est le seul a décider du découpage des données d'entrée
     if rank==0:
@@ -51,10 +53,18 @@ if __name__ == "__main__":
     indexes = comm.bcast(indexes, root=0)
 
     points = read_data(filename, dim, *indexes[rank])
+    read_end = time.time()
+    read_duration = read_end - read_start
+
+    exec_start = time.time()
     labels, centroids = kmeans(points, K, 100, 0.005, N)
+    exec_end = time.time()
+    exec_duration = exec_end - exec_start
 
     # le process maître va retirer les fichiers de sortie si jamais il y avait
     # une version précédente, il va également écrire le fichier des centroïdes
+
+    write_start = time.time()
     if rank==0 :
         if os.path.isfile(labels_filename):
             os.remove(labels_filename)
@@ -70,3 +80,8 @@ if __name__ == "__main__":
         if rank==i:
             write_labels(labels_filename, labels)
         comm.Barrier()
+    write_end = time.time()
+    write_duration = write_end - write_start
+
+    if rank==0:
+        print(str(read_duration) + ", " + str(exec_duration) + ", " + str(write_duration))
