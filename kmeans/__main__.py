@@ -51,7 +51,7 @@ if __name__ == "__main__":
     indexes = comm.bcast(indexes, root=0)
 
     points = read_data(filename, dim, *indexes[rank])
-    labels, centroids = kmeans(points, K)
+    labels, centroids = kmeans(points, K, 100, 0.005, N)
 
     # le process maître va retirer les fichiers de sortie si jamais il y avait
     # une version précédente, il va également écrire le fichier des centroïdes

@@ -1,7 +1,7 @@
 import numpy as np
 from mpi4py import MPI
 
-def kmeans(points, k, max_iterations=100, convergence_threshold=0.005, total_points=20):
+def kmeans(points, k, max_iterations, convergence_threshold, total_points):
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
     size = comm.Get_size()
@@ -22,7 +22,6 @@ def kmeans(points, k, max_iterations=100, convergence_threshold=0.005, total_poi
         # Mise à jour des centroïdes locaux
         local_sum_points = np.array([np.sum(points[labels == i], axis=0) for i in range(k)])
         nombre_points = np.array([len(points[labels == i]) for i in range(k)])
-        #comm.Barrier()
 
         global_nombre_points = np.zeros_like(nombre_points)
         global_sum_points = np.zeros_like(local_sum_points)
@@ -36,8 +35,6 @@ def kmeans(points, k, max_iterations=100, convergence_threshold=0.005, total_poi
             num_changed = np.sum(labels != previous_labels)
             num_changed_global = comm.allreduce(num_changed, op=MPI.SUM)
             if num_changed_global / total_points < convergence_threshold:
-                if rank == 0:
-                    print(f"CLAUSE SEUIL!!! à {iteration}")
                 break
         
         previous_labels = np.copy(labels)
