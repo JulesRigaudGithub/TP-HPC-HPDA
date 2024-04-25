@@ -53,6 +53,7 @@ if __name__ == "__main__":
     indexes = comm.bcast(indexes, root=0)
 
     points = read_data(filename, dim, *indexes[rank])
+
     read_end = time.time()
     read_duration = read_end - read_start
 

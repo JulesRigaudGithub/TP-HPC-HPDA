@@ -35,7 +35,7 @@ def read_data(filename, dim, start_index, next_index):
         with open(filename, 'rb') as f:
             f.seek(start_index)
             buf = f.read(next_index - start_index)
-            for line in buf.split(b'\r\n'):
+            for line in buf.split(b'\n'):
                 line_decoded = line.decode('utf8').split('\t')
 
                 if len(line_decoded) == dim :
