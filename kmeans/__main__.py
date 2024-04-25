@@ -85,4 +85,4 @@ if __name__ == "__main__":
     write_duration = write_end - write_start
 
     if rank==0:
-        print(str(read_duration) + ", " + str(exec_duration) + ", " + str(write_duration))
+        print(str(read_duration) + "," + str(exec_duration) + "," + str(write_duration))
