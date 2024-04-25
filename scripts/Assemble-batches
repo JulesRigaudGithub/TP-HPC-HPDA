@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cat output/result-*.csv > benchmark.csv
