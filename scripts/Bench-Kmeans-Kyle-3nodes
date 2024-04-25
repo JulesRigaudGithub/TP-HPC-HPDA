@@ -1,0 +1,19 @@
+#!/bin/bash
+#SBATCH --time=4
+
+# The line SBATCH --time=4 means: max exec time of the batch is 4 minutes
+# When developping and debuging: use small test and small time limits
+# After you can sublit Batch with 15, 30, 60, 120 minutes
+
+source /etc/profile
+
+module load py-mpi4py/3.1.4/gcc-12.3.0-openmpi
+
+echo "================= BENCH KMEANS 3 NODE =================="
+
+# Command to execute: /usr/bin/mpirun 
+
+/usr/bin/mpirun -np 48 -map-by ppr:16:node:PE=1 -rank-by core python3 kmeans ../Data-for-Benchmark/META_DATA_S1_1E4.txt
+
+
+echo "========================= END =========================="

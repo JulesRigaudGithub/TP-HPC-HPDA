@@ -1,0 +1,5 @@
+#!/bin/bash
+
+module load py-mpi4py/3.1.4/gcc-12.3.0-openmpi
+
+mpirun -np 2 -map-by ppr:2:node:PE=1 -rank-by core python3 kmeans ../Data/META_DATA_S1.txt
