@@ -2,7 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 df = pd.read_csv("benchmark.csv", dtype={'NODES' : int,
-                                         'DATASET' : str})
+                                         'DATASET' : str,
+                                         'ITER' : int})
 
 # Obtenir la liste des datasets uniques
 datasets = df['DATASET'].unique()

@@ -1,5 +1,5 @@
 #!/bin/bash
 
-echo NODES,DATASET,T_READ,T_EXEC,T_WRITE > benchmark.csv
+echo NODES,DATASET,ITER,T_READ,T_EXEC,T_WRITE > benchmark.csv
 
 cat output/result-*.csv >> benchmark.csv
