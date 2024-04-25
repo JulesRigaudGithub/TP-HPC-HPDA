@@ -2,7 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 df = pd.read_csv("benchmark.csv", dtype={'NODES' : int,
-                                         'DATASET' : str})
+                                         'DATASET' : str,
+                                         'ITER' : int})
 
 # Pour chaque dataset, tracer les courbes
 for dataset, data in df.groupby('DATASET'):

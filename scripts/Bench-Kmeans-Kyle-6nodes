@@ -8,14 +8,15 @@
 
 source /etc/profile
 
+module load py-mpi4py/3.1.4/gcc-12.3.0-openmpi
+
 for ((i=0; i<5; i++)); do
-    module load py-mpi4py/3.1.4/gcc-12.3.0-openmpi
 
 
-    echo -n "6, 1E4, "
+    echo -n "6, 1E4, $i, "
     /usr/bin/mpirun -np 96 -map-by ppr:16:node:PE=1 -rank-by core python3 kmeans ../Data-for-Benchmark/META_DATA_S1_1E4.txt
-    echo -n "6, 1E5, "
+    echo -n "6, 1E5, $i, "
     /usr/bin/mpirun -np 96 -map-by ppr:16:node:PE=1 -rank-by core python3 kmeans ../Data-for-Benchmark/META_DATA_S1_1E5.txt
-    echo -n "6, 1E6, "
+    echo -n "6, 1E6, $i, "
     /usr/bin/mpirun -np 96 -map-by ppr:16:node:PE=1 -rank-by core python3 kmeans ../Data-for-Benchmark/META_DATA_S1_1E6.txt
 done 
