@@ -4,30 +4,20 @@ import matplotlib.pyplot as plt
 df = pd.read_csv("benchmark.csv", dtype={'NODES' : int,
                                          'DATASET' : str})
 
-# Obtenir la liste des datasets uniques
-datasets = df['DATASET'].unique()
-
-# Parcourir chaque dataset
-for dataset in datasets:
-    # Filtrer les données pour le dataset actuel
-    dataset_data = df[df['DATASET'] == dataset]
-
-    # Créer une nouvelle figure
-    plt.figure()
-
-    # Parcourir chaque temps et tracer la courbe correspondante
-    temps_cols = ['T_READ', 'T_EXEC']
-    for temps_col in temps_cols:
-        plt.plot(dataset_data['NODES'], dataset_data[temps_col], label=temps_col)
-
-    # Ajouter des étiquettes et une légende au graphique
-    plt.xlabel('Nombre de nodes')
-    plt.ylabel('Temps')
+# Pour chaque dataset, tracer les courbes
+for dataset, data in df.groupby('DATASET'):
+    plt.figure()  # Crée une nouvelle figure pour chaque dataset
     plt.title(f"Temps d'exécution pour le dataset {dataset}")
-    plt.legend()
 
-    # Enregistrer le graphique au format PNG
-    plt.savefig(f'temps_{dataset}.png')
+    # Pour chaque temps, tracer la courbe correspondante
+    for temps in ['T_READ', 'T_EXEC', 'T_WRITE']:
+        # Calculer la moyenne des temps pour chaque nombre de nodes
+        moyennes = group.groupby('NODES')[temps].mean()
+        plt.plot(moyennes.index, moyennes.values, label=temps)
 
-    # Afficher le graphique
-    plt.show()
+    plt.xlabel('Nombre de nodes')
+    plt.ylabel('Temps moyen sur 5 prises (s)')
+    plt.legend()  # Afficher la légende
+    plt.grid(True)  # Activer la grille
+    plt.savefig(f'time_{dataset}.png')  # Enregistrer le graphe au format PNG
+    plt.close()  # Fermer la figure pour libérer la mémoire (facultatif)
