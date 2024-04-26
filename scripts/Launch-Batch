@@ -1,0 +1,9 @@
+#!/bin/bash
+
+for X in {1..8}; do
+    # Calculer la valeur de Y en fonction de X
+    Y=$((32 * X))
+
+    # Soumettre le travail Slurm avec les paramètres spécifiés et rediriger la sortie vers un fichier temporaire
+    sbatch -N $X -n $Y --exclusive --partition cpu_tp --qos=8nodespu ./scripts/Bench-Kmeans-Kyle-${X}nodes
+done
